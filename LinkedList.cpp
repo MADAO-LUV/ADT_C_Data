@@ -446,7 +446,7 @@ void Merge(struct Node* p, struct Node* q)
 	if (q)last->next = q;
 }
 
-
+//≈–∂œ «∑Ò—≠ª∑
 int IsLoop(struct Node* f)
 {
 	struct Node* p, * q;
