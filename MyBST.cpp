@@ -130,10 +130,13 @@ struct Node* Insucc(struct Node* p)
 	return p;
 }
 
-//删除节点
+//删除节点 主要是 将叶节点来代替啥的 实际操作上 删除是针对 叶子节点 但是
+//如，我删除某个中间节点的话，用该节点 的 左右子树的叶子节点来替代中间节点，并将那个用来替代的节点（叶子节点）删除。
+//这里的替代 取决于哪个子树的高度，最高的那个优先被取代。 目的是为了保证 BST的 平衡，否则会出现 树变成链表的情况
 struct Node* Delete(struct Node* p, int key)
 {
-	struct Node* q = NULL;
+
+	struct Node* q = NULL; 
 	if (p == NULL)
 	{
 		return NULL;
