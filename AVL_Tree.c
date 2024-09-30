@@ -199,6 +199,80 @@ void Inorder(struct Node* p)
 	}
 }
 
+//删除结点
+struct Node* RDelete(struct Node* p, int key)
+{
+	if (p == NULL)return p;  //这个结点 没有被找到
+
+	//标记 结点 以便删除
+	if (key < p->data)
+	{
+		p->lchild = RDelete(p->lchild, key);//继续搜素
+	}
+	else if (key > p->data)
+	{
+		p->rchild = RDelete(p->rchild, key);
+	}
+	else //这个就是找到了目标结点
+	{
+		struct Node* temp; //创建临时 结点
+		if (p->lchild == NULL || p->rchild == NULL)
+		{
+			temp = p->lchild ? p->lchild : p->rchild; 
+			//如果p->lchild存在 就是指定p->lchild否则就为p->rchild
+			free(p);
+			return temp; //返回不为NULL的子节点
+		}
+		else
+		{
+	//有两个子节点的节点： 获取顺次继承节点（右侧子树中最小的节点）
+			struct Node* successor = p->rchild;
+			while (successor && successor->lchild)
+			{
+				successor = successor->lchild;
+			}
+			p->data = successor->data; //复制successor里的值
+			p->rchild = RDelete(p->rchild, successor->data); //删除successor
+
+		}
+
+	}
+
+	//更新结点高度
+	p->high = NodeHeight(p);
+
+	//让树重新变得平衡
+	//这里是左旋转
+	if (BalanceFactor(p) == 2)
+	{
+		if (BalanceFactor(p->lchild) >= 0)
+		{
+			return LLRotation(p);
+		}
+		else
+		{
+			return LRRotation(p);
+		}
+	}
+
+	//这里是右旋转
+	if (BalanceFactor(p) == -2)
+	{
+		if (BalanceFactor(p->rchild) <= 0)
+		{
+			return RRRotation(p);
+		}
+		else
+		{
+			return RLRotation(p);
+		}
+	}
+
+	return p; //返回最新的结点 （经历过删除操作的剩余结点）
+}
+
+
+
 
 int main()
 {
